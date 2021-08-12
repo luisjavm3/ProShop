@@ -1,14 +1,15 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import colors from 'colors';
 
 import connectDB from './config/connectDB.js';
 import products from './data/products.js';
 
 dotenv.config();
+connectDB();
+
 const app = express();
 app.use(express.json());
-
-connectDB();
 
 // Routes
 app.get('/', (req, res) => {
@@ -28,5 +29,5 @@ app.get('/api/products/:id', (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server Listening on port ${PORT}`);
+  console.log(`Server Listening on port ${PORT}`.bgGreen.black);
 });
