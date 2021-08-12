@@ -34,11 +34,9 @@ productRoutes.route('/:id').get(
     try {
       const product = await Product.findById(id);
 
-      if (product) {
-        res.json(product);
-      } else {
-        throw new ErrorResponse('Product nor Found.', 404);
-      }
+      if (!product) throw new ErrorResponse('Product Not Found.', 404);
+
+      res.json(product);
     } catch (error) {
       next(error);
     }
