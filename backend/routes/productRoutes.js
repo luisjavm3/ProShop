@@ -1,6 +1,7 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
 import Product from '../models/Product.js';
+import ErrorResponse from '../utils/ErrorResponse.js';
 
 const productRoutes = express.Router();
 
@@ -10,10 +11,14 @@ const productRoutes = express.Router();
  * @access              Public
  */
 productRoutes.route('/').get(
-  asyncHandler(async (req, res) => {
-    const products = await Product.find({});
+  asyncHandler(async (req, res, next) => {
+    try {
+      const products = await Product.find({});
 
-    res.json(products);
+      res.json(products);
+    } catch (error) {
+      next(error);
+    }
   })
 );
 
@@ -23,14 +28,19 @@ productRoutes.route('/').get(
  * @access              Public
  */
 productRoutes.route('/:id').get(
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const id = req.params.id;
-    const product = await Product.findById(id);
 
-    if (product) {
-      res.json(product);
-    } else {
-      res.status(404).json({ message: 'Product not found.' });
+    try {
+      const product = await Product.findById(id);
+
+      if (product) {
+        res.json(product);
+      } else {
+        throw new ErrorResponse('Product nor Found.', 404);
+      }
+    } catch (error) {
+      next(error);
     }
   })
 );
