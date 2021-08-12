@@ -42,10 +42,16 @@ const destroyData = async () => {
     await Product.deleteMany();
     await User.deleteMany();
 
-    console.log('Data Destroyed'.bgRed.black);
+    console.log('Data Destroyed!'.bgRed.black);
     process.exit();
   } catch (error) {
     console.error(`${error.message}`.red);
     process.exit(1);
   }
 };
+
+if (process.argv[2] === '-d') {
+  destroyData();
+} else {
+  importData();
+}
