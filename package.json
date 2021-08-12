@@ -4,7 +4,8 @@
   "description": "MERN shopping cart app",
   "main": "server.js",
   "scripts": {
-    "start": "node backend/server"
+    "start": "node backend/server",
+    "server": "nodemon backend/server"
   },
   "keywords": [],
   "author": "Luis J. Montes",
