@@ -1,6 +1,7 @@
 import express from 'express';
 
-import { authUser } from '../controllers/userController.js';
+import { authUser, getUserProfile } from '../controllers/userController.js';
+import protect from '../middlewares/authMiddleware.js';
 import {
   getProductById,
   getProducts,
@@ -14,5 +15,12 @@ const userRoutes = express.Router();
  * @access              Public
  */
 userRoutes.route('/login').post(authUser);
+
+/**
+ * @route               GET    /api/users/profile
+ * @description         Get user profile
+ * @access              Private
+ */
+userRoutes.route('/profile').get(protect, getUserProfile);
 
 export default userRoutes;

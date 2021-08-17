@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
+
 import User from '../models/User.js';
-import Product from '../models/Product.js';
+import generateToken from '../utils/generateToken.js';
 import ErrorResponse from '../utils/ErrorResponse.js';
 
 /**
@@ -19,10 +20,21 @@ export const authUser = asyncHandler(async (req, res, next) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token: null,
+      token: generateToken(user._id),
     });
   } else {
     const error = new ErrorResponse('Invalid Credentials.', 401);
     return next(error);
   }
+});
+
+/**
+ * @route               GET    /api/users/profile
+ * @description         Get user profile
+ * @access              Private
+ */
+export const getUserProfile = asyncHandler(async (req, res, next) => {
+  // const user = await User.findById(req.user._id);
+
+  res.send('success');
 });
