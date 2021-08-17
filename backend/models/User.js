@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
-const userSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -26,5 +27,9 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-const User = mongoose.model('User', userSchema);
+UserSchema.methods.matchPassword = function (enteredPassword) {
+  return bcrypt.compareSync(enteredPassword, this.password);
+};
+
+const User = mongoose.model('User', UserSchema);
 export default User;

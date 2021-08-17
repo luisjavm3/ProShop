@@ -32,6 +32,6 @@ export const getProductById = asyncHandler(async (req, res, next) => {
 
     res.json(product);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
