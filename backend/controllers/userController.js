@@ -29,12 +29,54 @@ export const authUser = asyncHandler(async (req, res, next) => {
 });
 
 /**
+ * @route               POST    /api/users
+ * @description         Register a new user
+ * @access              Public
+ */
+export const registerUser = asyncHandler(async (req, res, next) => {
+  const { name, email, password } = req.body;
+
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    throw new ErrorResponse('User already exists.');
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+  });
+
+  if (user) {
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+    });
+  } else {
+    throw new ErrorResponse('Invalid user data.', 400);
+  }
+});
+
+/**
  * @route               GET    /api/users/profile
  * @description         Get user profile
  * @access              Private
  */
 export const getUserProfile = asyncHandler(async (req, res, next) => {
-  // const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id);
 
-  res.send('success');
+  if (user) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    throw new ErrorResponse('User not found.', 404);
+  }
 });

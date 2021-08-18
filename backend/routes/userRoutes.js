@@ -1,13 +1,24 @@
 import express from 'express';
 
-import { authUser, getUserProfile } from '../controllers/userController.js';
-import protect from '../middlewares/authMiddleware.js';
+import {
+  authUser,
+  getUserProfile,
+  registerUser,
+} from '../controllers/userController.js';
 import {
   getProductById,
   getProducts,
 } from '../controllers/productController.js';
+import protect from '../middlewares/authMiddleware.js';
 
 const userRoutes = express.Router();
+
+/**
+ * @route               POST    /api/users
+ * @description         Register a new user
+ * @access              Public
+ */
+userRoutes.route('/').post(registerUser);
 
 /**
  * @route               POST    /api/users/login

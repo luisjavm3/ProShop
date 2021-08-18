@@ -27,6 +27,15 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next();
+  }
+
+  const salt = bcrypt.genSaltSync(10);
+  this.password = bcrypt.hashSync(this.password, salt);
+});
+
 UserSchema.methods.matchPassword = function (enteredPassword) {
   return bcrypt.compareSync(enteredPassword, this.password);
 };
