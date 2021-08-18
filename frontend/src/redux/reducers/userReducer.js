@@ -3,9 +3,12 @@ import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_LOGOUT,
+  USER_REGISTER_FAIL,
+  USER_REGISTER_REQUEST,
+  USER_REGISTER_SUCCESS,
 } from '../actionTypes';
 
-const userLoginReducer = (state = {}, action) => {
+export const userLoginReducer = (state = {}, action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -13,8 +16,7 @@ const userLoginReducer = (state = {}, action) => {
       return { loading: true };
 
     case USER_LOGIN_SUCCESS:
-      // Here may be an error, It should be better if we change products for user
-      return { loading: false, products: payload };
+      return { loading: false, userInfo: payload };
 
     case USER_LOGIN_FAIL:
       return { loading: false, error: payload };
@@ -27,4 +29,20 @@ const userLoginReducer = (state = {}, action) => {
   }
 };
 
-export default userLoginReducer;
+export const userRegisterReducer = (state = {}, action) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case USER_REGISTER_REQUEST:
+      return { loading: true };
+
+    case USER_REGISTER_SUCCESS:
+      return { loading: false, userInfo: payload };
+
+    case USER_REGISTER_FAIL:
+      return { loading: false, error: payload };
+
+    default:
+      return state;
+  }
+};
