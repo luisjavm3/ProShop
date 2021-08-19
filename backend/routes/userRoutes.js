@@ -4,6 +4,7 @@ import {
   authUser,
   getUserProfile,
   registerUser,
+  updateUserProfile,
 } from '../controllers/userController.js';
 import {
   getProductById,
@@ -32,6 +33,9 @@ userRoutes.route('/login').post(authUser);
  * @description         Get user profile
  * @access              Private
  */
-userRoutes.route('/profile').get(protect, getUserProfile);
+userRoutes
+  .route('/profile')
+  .get(protect, getUserProfile)
+  .put(protect, updateUserProfile);
 
 export default userRoutes;
