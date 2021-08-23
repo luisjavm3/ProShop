@@ -12,17 +12,21 @@ const OrderScreen = ({ match }) => {
 
   const dispatch = useDispatch();
 
-  const addDecimals = (num) => {
-    return (Math.round(num * 100) / 100).toFixed(2);
-  };
-
   const orderDetails = useSelector((state) => state.orderCreate);
   const { order, loading, error } = orderDetails;
 
-  // Calculate prices
-  order.itemsPrice = addDecimals(
-    order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-  );
+  console.log(order);
+
+  if (!loading) {
+    //   Calculate prices
+    const addDecimals = (num) => {
+      return (Math.round(num * 100) / 100).toFixed(2);
+    };
+
+    order.itemsPrice = addDecimals(
+      order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    );
+  }
 
   useEffect(() => {
     dispatch(getOrderDetails(orderId));
@@ -41,7 +45,8 @@ const OrderScreen = ({ match }) => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>Shipping</h2>
-
+              <strong>Name: </strong> {order.user.name}
+              <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
               <p>
                 <strong>Address: </strong> &nbsp;
                 {order.shippingAddress.address}, {order.shippingAddress.city},{' '}
@@ -52,8 +57,17 @@ const OrderScreen = ({ match }) => {
 
             <ListGroup.Item>
               <h2>Payment Method</h2>
-              <strong>Method:</strong> &nbsp;
-              {order.paymentMethod}
+
+              <p>
+                <strong>Method:</strong> &nbsp;
+                {order.paymentMethod}
+              </p>
+
+              {order.isPaid ? (
+                <Message variant="success">Paid on {order.paidAt}</Message>
+              ) : (
+                <Message variant="danger">Not paid.</Message>
+              )}
             </ListGroup.Item>
 
             <ListGroup.Item>
